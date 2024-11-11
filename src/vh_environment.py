@@ -3,6 +3,7 @@ import os
 import copy
 import json
 import vh_utils as utils
+from dict import load_dict
 
 # modify path as necessary
 curr_dir = os.path.dirname(os.path.realpath(__file__))
@@ -11,6 +12,9 @@ from virtualhome.simulation.environment.unity_environment import UnityEnvironmen
 from virtualhome.simulation.evolving_graph import utils as utils_env
 
 class VhEnv(BaseUnityEnvironment):
+    # load dictionaries
+    obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
+    
     def __init__(self, cfg):
         super(VhEnv, self).__init__(num_agents=1,
                                     observation_types=cfg.environment.observation_types,
@@ -21,31 +25,6 @@ class VhEnv(BaseUnityEnvironment):
                                     recording_options=cfg.environment.recording_options)
         print("Environment is initialized")
         self.full_graph = None
-
-        # modify path as necessary
-        resource_folder = 'resource'
-        sim2nl_path = os.path.join(resource_folder, 'wah_objects_sim2nl.json')
-        nl2sim_path = os.path.join(resource_folder, 'wah_objects_nl2sim.json')
-        
-        with open(sim2nl_path, 'r') as file:
-            self.obj_dict_sim2nl = json.load(file)
-        with open(nl2sim_path, 'r') as file:
-            self.obj_dict_nl2sim = json.load(file)
-    
-    # def __init__(self, cfg):
-    #     super(VhEnv, self).__init__(num_agents=1,
-    #                                 observation_types=cfg.environment.observation_types,
-    #                                 use_editor=cfg.environment.use_editor,
-    #                                 base_port=cfg.environment.base_port,
-    #                                 port_id=cfg.environment.port_id,
-    #                                 executable_args=cfg.environment.executable_args,
-    #                                 recording_options=cfg.environment.recording_options)
-    #     print("Environment is initialized")
-    #     self.full_graph = None
-    #     with open(cfg.dataset.obj_dict_sim2nl, 'r') as file:
-    #         self.obj_dict_sim2nl = json.load(file)
-    #     with open(cfg.dataset.obj_dict_nl2sim, 'r') as file:
-    #         self.obj_dict_nl2sim = json.load(file)
 
     def reset(self, task_d):
         # Make sure that characters are out of graph, and ids are ok

@@ -9,14 +9,15 @@ from vh_environment import VhEnv
 import vh_utils as utils
 from virtualhome.simulation.unity_simulator import comm_unity
 import argparse
+from dict import load_dict
 
 
 class TaskPlanner:
     def __init__(self, openai_api_key, cfg):
         self.client = OpenAI(api_key=openai_api_key)
         self.env = VhEnv(cfg)
-        # modify path!!!!!
-        self.obj_dict_nl2sim = self.load_obj_dicts(cfg.dataset.obj_dict_nl2sim)
+        # load dictionaries
+        self.obj_dict_sim2nl, self.obj_dict_nl2sim = load_dict()
         self.comm = comm_unity.UnityCommunication()
     
     # generate a structured task plan output from high-level descriptions 

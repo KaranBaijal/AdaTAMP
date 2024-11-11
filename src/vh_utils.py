@@ -4,6 +4,8 @@ import copy
 import random
 import math
 import json
+from dict import load_dict
+
 
 # Use most of the functions in this github repo: https://github.com/lbaa2022/LLMTaskPlanning
 def separate_new_ids_graph(graph, max_id):
@@ -18,14 +20,11 @@ def separate_new_ids_graph(graph, max_id):
             edge['to_id'] = edge['to_id'] - max_id + 1000
     return new_graph
 
-
-# CHECK DICT PATH!!!!!!
 # extract natural language instructions (e.g., put down the book) to executable script in vh
 def step_nl2sim(step_nl, obj_dict_nl2sim, cur_recep, resource_folder='resource'):
     
-    with open(os.path.join(resource_folder, 'wah_objects_nl2sim.json'), 'r') as file:
-        obj_dict_nl2sim = json.load(file)
-
+    obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
+    
     if "put down" in step_nl:
         nl_putin_objs = ['bathroom cabinet', 'bookshelf', 'box', 'cabinet', 'closet', 'pile of clothes', 'coffee maker', 'dishwasher', 'folder', 'fridge', 'frying pan', 'garbage can', 'kitchen cabinet', 'microwave oven', 'nightstand', 'printer', 'sink', 'stove', 'toaster', 'toilet', 'washing machine']
         nl_putback_objs = ['bathroom cabinet', 'bathroom counter', 'bed', 'bench', 'board game', 'bookshelf', 'cabinet', 'chair', 'coffee table', 'cutting board', 'desk', 'floor', 'frying pan', 'kitchen cabinet', 'kitchen counter', 'kitchen table', 'mouse mat', 'nightstand', 'oven tray', 'plate', 'radio', 'rug', 'sofa', 'stove', 'towel rack']
