@@ -5,11 +5,11 @@ sys.path.insert(0, '/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome')
 import os
 import json
 from openai import OpenAI
-from vh_environment import VhEnv
-import vh_utils as utils
+from src.vh_environment import VhEnv
+import src.vh_utils as utils
+from src.dict import load_dict
 from virtualhome.simulation.unity_simulator import comm_unity
 import argparse
-from dict import load_dict
 
 
 class TaskPlanner:

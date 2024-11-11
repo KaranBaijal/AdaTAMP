@@ -2,19 +2,19 @@ import sys
 import os
 import copy
 import json
-import vh_utils as utils
-from dict import load_dict
+import src.vh_utils as utils
+from src.dict import load_dict
 
 # modify path as necessary
-curr_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(os.path.join(curr_dir, '../..'))
+# curr_dir = os.path.dirname(os.path.realpath(__file__))
+# sys.path.append(os.path.join(curr_dir, '../..'))
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
 from virtualhome.simulation.evolving_graph import utils as utils_env
 
 class VhEnv(BaseUnityEnvironment):
     # load dictionaries
     obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
-    
+
     def __init__(self, cfg):
         super(VhEnv, self).__init__(num_agents=1,
                                     observation_types=cfg.environment.observation_types,
