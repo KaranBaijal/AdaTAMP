@@ -4,6 +4,11 @@ import copy
 import random
 import math
 import json
+
+# # run directly
+# from dict import load_dict
+
+# run .ipynb
 from src.dict import load_dict
 
 

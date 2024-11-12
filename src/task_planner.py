@@ -1,22 +1,26 @@
-import sys
-
+import sys, os
 # add root path to avoid errors for __init__.py from vh
 sys.path.insert(0, '/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome')
-import os
 import json
 from openai import OpenAI
+from virtualhome.simulation.unity_simulator import comm_unity
+import argparse
+
+# # run directly
+# from vh_environment import VhEnv
+# import vh_utils as utils
+# from dict import load_dict
+
+# run .ipynb
 from src.vh_environment import VhEnv
 import src.vh_utils as utils
 from src.dict import load_dict
-from virtualhome.simulation.unity_simulator import comm_unity
-import argparse
 
 
 class TaskPlanner:
     def __init__(self, openai_api_key, cfg):
         self.client = OpenAI(api_key=openai_api_key)
         self.env = VhEnv(cfg)
-        # load dictionaries
         self.obj_dict_sim2nl, self.obj_dict_nl2sim = load_dict()
         self.comm = comm_unity.UnityCommunication()
     
@@ -64,12 +68,11 @@ class TaskPlanner:
         return []
 
     def execute_plan(self, actions):
-        self.comm.reset(0)
+        # Convert high-level actions to simulation steps
         script = [
-            f"<{action['character']}> [{action['action']}] <{action['object']}> ({action['id']})"
+            utils.step_nl2sim(action['action'], self.obj_dict_nl2sim, None)  # Adjust parameters as needed
             for action in actions
         ]
-
         success, message = self.comm.render_script(
             script=script,
             processing_time_limit=60,
@@ -90,20 +93,17 @@ class TaskPlanner:
 # add reset, init_skill_set, score etc. if necessary for adapting to new env
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="A simple main method with arguments")
-    parser.add_argument('-k', '--key', type=str, help="Your OpenAI API key.")
-    args = parser.parse_args()
+# if __name__ == '__main__':
+#     parser = argparse.ArgumentParser(description="A simple main method with arguments")
+#     parser.add_argument('-k', '--key', type=str, help="Your OpenAI API key.")
+#     args = parser.parse_args()
 
-    task_description = "clean the living room"
-    planner = TaskPlanner(
-        openai_api_key=args.key
-    )
-    # evaluator = Evaluator()
+#     task_description = "clean the living room"
+#     planner = TaskPlanner(
+#         openai_api_key=args.key
+#     )
 
-    actions = planner.init_task_plan(task_description)
-    print("Generated Task Plan:", actions)
+#     actions = planner.init_task_plan(task_description)
+#     print("Generated Task Plan:", actions)
 
-    success = planner.execute_plan(actions)
-    # evaluator.evaluate_task({"success": success})
-    # evaluator.log_metrics()
+#     success = planner.execute_plan(actions)

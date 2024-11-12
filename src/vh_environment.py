@@ -2,27 +2,32 @@ import sys
 import os
 import copy
 import json
+
+# # run directly
+# import vh_utils as utils
+# from dict import load_dict
+
+# run .ipynb
 import src.vh_utils as utils
 from src.dict import load_dict
 
-# modify path as necessary
-# curr_dir = os.path.dirname(os.path.realpath(__file__))
-# sys.path.append(os.path.join(curr_dir, '../..'))
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
 from virtualhome.simulation.evolving_graph import utils as utils_env
 
+# This class translates high-level NL task plans into simulated steps in vh
 class VhEnv(BaseUnityEnvironment):
-    # load dictionaries
     obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
 
     def __init__(self, cfg):
-        super(VhEnv, self).__init__(num_agents=1,
-                                    observation_types=cfg.environment.observation_types,
-                                    use_editor=cfg.environment.use_editor,
-                                    base_port=cfg.environment.base_port,
-                                    port_id=cfg.environment.port_id,
-                                    executable_args=cfg.environment.executable_args,
-                                    recording_options=cfg.environment.recording_options)
+        super(VhEnv, self).__init__(
+            num_agents=1,
+            observation_types=cfg.environment.observation_types,
+            use_editor=cfg.environment.use_editor,
+            base_port=cfg.environment.base_port,
+            port_id=cfg.environment.port_id,
+            executable_args=cfg.environment.executable_args,
+            recording_options=cfg.environment.recording_options
+        )
         print("Environment is initialized")
         self.full_graph = None
 
