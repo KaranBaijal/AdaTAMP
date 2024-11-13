@@ -12,12 +12,14 @@ from openai import OpenAI
 from src.task_planner import TaskPlanner
 from src.vh_environment import VhEnv
 import src.vh_utils as utils
+from src.test.graph_verification import verify_graph_structure
 from virtualhome.demo.utils_demo import *
 from virtualhome.simulation.unity_simulator import comm_unity
 
 # modify dir
 YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.v2.3.0.app"
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
+
 
 class MockConfig:
     class Environment:
@@ -45,48 +47,91 @@ if __name__ == '__main__':
     success, init_graph = comm.environment_graph()
     if not success:
         print("Failed to retrieve the initial environment graph.")
-        init_graph = {
-            "nodes": [],
-            "edges": []
-        }
+    
+    # Start with a room-only graph
+    init_graph = {
+        "nodes": [
+            {
+                "id": 1,
+                "class_name": "livingroom",
+                "category": "Rooms",
+                "obj_transform": {
+                    "position": [0, 0, 0],
+                    "rotation": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                }
+            },
+            {
+                "id": 2,
+                "class_name": "sofa",
+                "category": "Furniture",
+                "obj_transform": {
+                    "position": [1, 0, 1],
+                    "rotation": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                }
+            }
+        ],
+        "edges": [
+            {
+                "from_id": 2,
+                "to_id": 1,
+                "relation_type": "INSIDE"
+            }
+        ]
+    }
 
-    # Add a cat node linked to the sofa
-    try:
-        sofa = [node for node in init_graph['nodes'] if node['class_name'] == 'sofa'][-1]
-        cat_node = {
-            'class_name': 'cat',
-            'category': 'Animals',
-            'id': 1000,
-            'properties': [],
-            'states': [],
-            'obj_transform': {'position': [1, 0, 1], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
-        }
-        init_graph['nodes'].append(cat_node)
-        init_graph['edges'].append({'from_id': 1000, 'to_id': sofa['id'], 'relation_type': 'ON'})
+    print("Initial Graph for Debugging:")
+    print(json.dumps(init_graph, indent=2))
 
-        # Modify TV and light nodes' states
-        tv_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'tv')
-        light_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'lightswitch')
-        tv_node['states'] = ['ON']
-        light_node['states'] = ['OFF']
+    # Try expanding this minimal graph
+    success, message = comm.expand_scene(init_graph)
+    if not success:
+        print(f"Failed to expand scene: {message}")
+    else:
+        print("Scene expanded successfully.")
+    #     init_graph = {
+    #         "nodes": [],
+    #         "edges": []
+    #     }
 
-        # Add a character node to the environment
-        character_node = {
-            'class_name': 'character',
-            'id': 2000,
-            'properties': [],
-            'states': [],
-            'obj_transform': {'position': [2, 0, 2], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
-        }
-        init_graph['nodes'].append(character_node)
+    # # Add a cat node linked to the sofa
 
-    except IndexError:
-        print("Could not find sofa or necessary nodes in the initial graph.")
-    except StopIteration:
-        print("Could not find TV or light nodes in the initial graph.")
+    # sofa = [node for node in init_graph['nodes'] if node['class_name'] == 'sofa'][-1]
+    # cat_node = {
+    #         'class_name': 'cat',
+    #         'category': 'Animals',
+    #         'id': 1000,
+    #         'properties': [],
+    #         'states': [],
+    #         'obj_transform': {'position': [1, 0, 1], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
+    #     }
+    # init_graph['nodes'].append(cat_node)
+    # init_graph['edges'].append({'from_id': 1000, 'to_id': sofa['id'], 'relation_type': 'ON'})
 
-    # # Print the graph for debugging
-    # print("Initial Graph Structure:", json.dumps(init_graph, indent=4))
+    #  # Modify TV and light nodes' states
+    # tv_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'tv')
+    # light_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'lightswitch')
+    # tv_node['states'] = ['ON']
+    # light_node['states'] = ['OFF']
+
+    # # Add a character node to the environment
+    # character_node = {
+    #         'id': 2000,
+    #         'class_name': 'character',
+    #         'category': 'Agents',
+    #         'properties': [],
+    #         'states': [],
+    #         'obj_transform': {
+    #             'position': [2, 0, 2],
+    #             'rotation': [0, 0, 0, 1],
+    #             'scale': [1, 1, 1]
+    #         }
+    # }
+    # init_graph['nodes'].append(character_node)
+
+    # verify graph nodes and edges
+    verify_graph_structure(init_graph)
 
     # Create sample task_d for resetting the environment
     task_d = {

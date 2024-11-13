@@ -42,6 +42,7 @@ class VhEnv(BaseUnityEnvironment):
         self.env_id = task_d['env_id']
         print("Resetting... Envid: {}. Taskid: {}. Taskname: {}".format(self.env_id, self.task_id, self.task_name))
         
+        # comm & expand scenes
         self.comm.reset(self.env_id)
         s, g = self.comm.environment_graph()
         edge_ids = set([edge['to_id'] for edge in g['edges']] + [edge['from_id'] for edge in g['edges']])

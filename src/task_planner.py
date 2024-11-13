@@ -91,19 +91,3 @@ class TaskPlanner:
             print("Execution failed:", message)
 
 # add reset, init_skill_set, score etc. if necessary for adapting to new env
-
-
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser(description="A simple main method with arguments")
-#     parser.add_argument('-k', '--key', type=str, help="Your OpenAI API key.")
-#     args = parser.parse_args()
-
-#     task_description = "clean the living room"
-#     planner = TaskPlanner(
-#         openai_api_key=args.key
-#     )
-
-#     actions = planner.init_task_plan(task_description)
-#     print("Generated Task Plan:", actions)
-
-#     success = planner.execute_plan(actions)
