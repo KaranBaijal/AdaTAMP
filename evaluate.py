@@ -4,6 +4,7 @@ import sys, os
 import IPython.display
 from sys import platform
 from PIL import Image
+import json
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import argparse
@@ -38,11 +39,61 @@ class MockConfig:
 if __name__ == '__main__':
     openai_api_key = "your_openai_api_key_here"  # Replace with your actual API key
     task_description = "sit on the sofa"
+
+    # Generate the initial graph programmatically
+    comm.reset(0)
+    success, init_graph = comm.environment_graph()
+    if not success:
+        print("Failed to retrieve the initial environment graph.")
+        init_graph = {
+            "nodes": [],
+            "edges": []
+        }
+
+    # Add a cat node linked to the sofa
+    try:
+        sofa = [node for node in init_graph['nodes'] if node['class_name'] == 'sofa'][-1]
+        cat_node = {
+            'class_name': 'cat',
+            'category': 'Animals',
+            'id': 1000,
+            'properties': [],
+            'states': [],
+            'obj_transform': {'position': [1, 0, 1], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
+        }
+        init_graph['nodes'].append(cat_node)
+        init_graph['edges'].append({'from_id': 1000, 'to_id': sofa['id'], 'relation_type': 'ON'})
+
+        # Modify TV and light nodes' states
+        tv_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'tv')
+        light_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'lightswitch')
+        tv_node['states'] = ['ON']
+        light_node['states'] = ['OFF']
+
+        # Add a character node to the environment
+        character_node = {
+            'class_name': 'character',
+            'id': 2000,
+            'properties': [],
+            'states': [],
+            'obj_transform': {'position': [2, 0, 2], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
+        }
+        init_graph['nodes'].append(character_node)
+
+    except IndexError:
+        print("Could not find sofa or necessary nodes in the initial graph.")
+    except StopIteration:
+        print("Could not find TV or light nodes in the initial graph.")
+
+    # # Print the graph for debugging
+    # print("Initial Graph Structure:", json.dumps(init_graph, indent=4))
+
+    # Create sample task_d for resetting the environment
     task_d = {
         'task_id': 1,
-        'init_graph': {},  # Provide a valid initial graph if needed
+        'init_graph': init_graph,
         'init_room': 'living_room',
-        'task_goal': {},  # Define task goal if necessary
+        'task_goal': {},
         'task_name': task_description,
         'env_id': 0
     }
@@ -55,7 +106,7 @@ if __name__ == '__main__':
         cfg=mock_cfg
     )
 
-    # Explicitly reset the environment with task details
+    # Reset the environment with the task details
     planner.env.reset(task_d)
 
     # Generate and print actions
