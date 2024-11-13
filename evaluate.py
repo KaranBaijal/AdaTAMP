@@ -16,7 +16,7 @@ from virtualhome.demo.utils_demo import *
 from virtualhome.simulation.unity_simulator import comm_unity
 
 # modify dir
-YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.2.2.4.app"
+YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.v2.3.0.app"
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
 
 class MockConfig:
