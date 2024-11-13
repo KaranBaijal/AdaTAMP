@@ -39,10 +39,10 @@ class MockConfig:
 
 
 if __name__ == '__main__':
-    openai_api_key = "your_openai_api_key_here"  # Replace with your actual API key
+    openai_api_key = "your_openai_api_key_here"
     task_description = "sit on the sofa"
 
-    # Generate the initial graph programmatically
+    # Generate the initial graph
     comm.reset(0)
     success, init_graph = comm.environment_graph()
     if not success:
