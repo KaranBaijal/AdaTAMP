@@ -1,6 +1,4 @@
 import sys, os
-# sys.path.append(os.path.abspath('/Users/zhiwenqiu/Documents/projects/AdaTAMP/src'))
-
 import IPython.display
 from sys import platform
 from PIL import Image
