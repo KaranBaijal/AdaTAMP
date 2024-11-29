@@ -9,14 +9,14 @@ import pdb
 # from dict import load_dict
 
 # run .ipynb
-import src.vh_utils as utils
-from src.dict import load_dict
+import vh_utils as utils
+from dict import load_dict
 
 # modify path as necessary
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(curr_dir, '..'))
-from virtualhome.simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
-from virtualhome.simulation.evolving_graph import utils as utils_env
+from simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
+from simulation.evolving_graph import utils as utils_env
 
 # This class translates high-level NL task plans into simulated steps in vh
 class VhEnv(BaseUnityEnvironment):

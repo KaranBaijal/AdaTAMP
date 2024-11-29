@@ -1,5 +1,4 @@
 import sys, os
-import IPython.display
 from sys import platform
 from PIL import Image
 import json
@@ -10,12 +9,14 @@ from openai import OpenAI
 from src.task_planner import TaskPlanner
 from src.vh_environment import VhEnv
 import src.vh_utils as utils
-from src.test.graph_verification import verify_graph_structure
-from virtualhome.demo.utils_demo import *
+from src.tests.graph_verification import verify_graph_structure
+
 from virtualhome.simulation.unity_simulator import comm_unity
+from virtualhome.demo.utils_demo import *
+
 
 # modify dir
-YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.v2.3.0.app"
+YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.2.2.4.app"
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
 
 
@@ -25,7 +26,7 @@ class MockConfig:
         use_editor = True
         base_port = 8080
         port_id = 1
-        executable_args = {'file_name': "/path/to/your/executable"}
+        executable_args = {'file_name': "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/macos_exec.2.2.4.app"}
         recording_options = {
             'recording': False,
             'output_folder': './output',
@@ -37,7 +38,8 @@ class MockConfig:
 
 
 if __name__ == '__main__':
-    openai_api_key = "your_openai_api_key_here"
+    #openai_api_key = "your_openai_api_key_here"
+    openai_api_key = "REMOVED_API_KEY"
     task_description = "sit on the sofa"
 
     # Generate the initial graph
@@ -46,48 +48,143 @@ if __name__ == '__main__':
     if not success:
         print("Failed to retrieve the initial environment graph.")
     
-    # Start with a room-only graph
     init_graph = {
-        "nodes": [
-            {
-                "id": 1,
-                "class_name": "livingroom",
-                "category": "Rooms",
-                "obj_transform": {
-                    "position": [0, 0, 0],
-                    "rotation": [0, 0, 0, 1],
-                    "scale": [1, 1, 1]
-                }
-            },
-            {
-                "id": 2,
-                "class_name": "sofa",
-                "category": "Furniture",
-                "obj_transform": {
-                    "position": [1, 0, 1],
-                    "rotation": [0, 0, 0, 1],
-                    "scale": [1, 1, 1]
-                }
+    "nodes": [
+        # Rooms
+        {
+            "id": 1,
+            "class_name": "kitchen",
+            "category": "Rooms",
+            "obj_transform": {
+                "position": [0, 0, 0],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
             }
-        ],
-        "edges": [
-            {
-                "from_id": 2,
-                "to_id": 1,
-                "relation_type": "INSIDE"
+        },
+        {
+            "id": 2,
+            "class_name": "livingroom",
+            "category": "Rooms",
+            "obj_transform": {
+                "position": [5, 0, 0],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
             }
-        ]
-    }
+        },
 
-    print("Initial Graph for Debugging:")
-    print(json.dumps(init_graph, indent=2))
+        # Kitchen objects
+        {
+            "id": 3,
+            "class_name": "fridge",
+            "category": "Furniture",
+            "obj_transform": {
+                "position": [1, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 4,
+            "class_name": "dishwasher",
+            "category": "Appliances",
+            "obj_transform": {
+                "position": [2, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 5,
+            "class_name": "cabinet",
+            "category": "Furniture",
+            "obj_transform": {
+                "position": [3, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 6,
+            "class_name": "kitchen table",
+            "category": "Furniture",
+            "obj_transform": {
+                "position": [4, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 7,
+            "class_name": "wine glass",
+            "category": "Utensils",
+            "obj_transform": {
+                "position": [3, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 8,
+            "class_name": "water glass",
+            "category": "Utensils",
+            "obj_transform": {
+                "position": [3, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 9,
+            "class_name": "pudding",
+            "category": "Food",
+            "obj_transform": {
+                "position": [1, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
 
-    # Try expanding this minimal graph
-    success, message = comm.expand_scene(init_graph)
-    if not success:
-        print(f"Failed to expand scene: {message}")
-    else:
-        print("Scene expanded successfully.")
+        # Livingroom objects
+        {
+            "id": 10,
+            "class_name": "coffee table",
+            "category": "Furniture",
+            "obj_transform": {
+                "position": [6, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        },
+        {
+            "id": 11,
+            "class_name": "sofa",
+            "category": "Furniture",
+            "obj_transform": {
+                "position": [7, 0, 1],
+                "rotation": [0, 0, 0, 1],
+                "scale": [1, 1, 1]
+            }
+        }
+    ],
+    "edges": [
+        {"from_id": 7, "to_id": 5, "relation_type": "INSIDE"},
+        {"from_id": 8, "to_id": 5, "relation_type": "INSIDE"},
+        {"from_id": 9, "to_id": 3, "relation_type": "INSIDE"},
+
+        {"from_id": 10, "to_id": 2, "relation_type": "INSIDE"},
+        {"from_id": 11, "to_id": 2, "relation_type": "INSIDE"}
+    ]
+}
+
+print("Initial Graph for Debugging:")
+print(json.dumps(init_graph, indent=2))
+
+    # # Try expanding this minimal graph
+    # success, message = comm.expand_scene(init_graph)
+    # if not success:
+    #     print(f"Failed to expand scene: {message}")
+    # else:
+    #     print("Scene expanded successfully.")
     #     init_graph = {
     #         "nodes": [],
     #         "edges": []

@@ -3,9 +3,9 @@ import sys, os
 sys.path.insert(0, '/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome')
 import json
 from openai import OpenAI
-from src.vh_environment import VhEnv
-import src.vh_utils as utils
-from virtualhome.simulation.unity_simulator import comm_unity
+from vh_environment import VhEnv
+import vh_utils as utils
+from simulation.unity_simulator import comm_unity
 import argparse
 
 # # run directly
@@ -14,9 +14,9 @@ import argparse
 # from dict import load_dict
 
 # run .ipynb
-from src.vh_environment import VhEnv
-import src.vh_utils as utils
-from src.dict import load_dict
+from vh_environment import VhEnv
+import vh_utils as utils
+from dict import load_dict
 
 
 class TaskPlanner:
@@ -52,9 +52,6 @@ class TaskPlanner:
         actions = self.process_response(response.choices[0].message.content)
         return actions
 
-# Level 1: one step
-# Level 2: avoid static obstacles
-# Level 3: more agents, coordination
 
  ## give image of scene or env graph representation, more in-context examples
   # TODO: Check with calvin abt environment_description

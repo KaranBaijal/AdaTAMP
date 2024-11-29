@@ -3,9 +3,9 @@ import sys, os
 sys.path.insert(0, '/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome')
 import json
 from openai import OpenAI
-from src.vh_environment import VhEnv
-import src.vh_utils as utils
-from virtualhome.simulation.unity_simulator import comm_unity
+from vh_environment import VhEnv
+import vh_utils as utils
+from simulation.unity_simulator import comm_unity
 import argparse
 
 # # run directly
@@ -14,9 +14,9 @@ import argparse
 # from dict import load_dict
 
 # run .ipynb
-from src.vh_environment import VhEnv
-import src.vh_utils as utils
-from src.dict import load_dict
+from vh_environment import VhEnv
+import vh_utils as utils
+from dict import load_dict
 
 
 class TaskPlanner:
@@ -28,51 +28,25 @@ class TaskPlanner:
     
     # generate a structured task plan output from high-level descriptions 
     def init_task_plan(self, task_description):
-        prompt, action_schema = self.init_prompt(task_description)
+        prompt = self.init_prompt(task_description)
         response = self.client.chat.completions.create(
-            model="gpt-4o-2024-08-06",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a high-level planner for VirtualHome."},
                 {"role": "user", "content": prompt}
             ],
-            response_format = {
-            "type": "json_schema",
-            "json_schema": {
-                "name": "action_sequence",
-                "schema": {
-                    "type": "array",
-                    "items": action_schema
-                },
-                "strict": True
-            }
-            },
             max_tokens=300,
             temperature=0
         )
         actions = self.process_response(response.choices[0].message.content)
         return actions
 
-# Level 1: one step
-# Level 2: avoid static obstacles
-# Level 3: more agents, coordination
 
  ## give image of scene or env graph representation, more in-context examples
-  # TODO: Check with calvin abt environment_description
     def init_prompt(self, task_description):
-        action_schema = {
-        "type": "object",
-        "properties": {
-            "character": {"type": "string"},
-            "action": {"type": "string"},
-            "object": {"type": "string"},
-            "id": {"type": "integer"}
-        },
-        "required": ["character", "action", "object", "id"],
-        "additionalProperties": False
-        }
         prompt = (
-        f"You are a high-level planner in the VirtualHome environment. An evironment graph of where you are is {self.env}. \
-        Your task is to break down the task '{task_description}' into a sequence of structured actions that a virtual character can execute in this environment graph. "
+        f"You are a high-level planner in {self.environment_description}. Your task is to break down the task '{task_description}' "
+        f"into a sequence of structured actions that a virtual character can execute in VirtualHome. "
         "Each action should include the character performing the action, the action itself, the target object, and the object ID. "
         "Return the actions strictly in JSON format as a list of dictionaries, with each dictionary containing keys 'character', 'action', 'object', and 'id'. "
         "Do not include any extra text or explanation, only JSON."
@@ -84,7 +58,7 @@ class TaskPlanner:
         "]\n\n"
         f"Now, generate the actions for the task: '{task_description}'"
     )
-        return prompt, action_schema
+        return prompt
 
     # convert json into structured actions
     def process_response(self, response_text):

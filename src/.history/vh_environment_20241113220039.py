@@ -2,36 +2,27 @@ import sys
 import os
 import copy
 import json
-import pdb
-
-# # run directly
-# import vh_utils as utils
-# from dict import load_dict
-
-# run .ipynb
-import src.vh_utils as utils
-from src.dict import load_dict
+import vh_utils as utils
+from dict import load_dict
 
 # modify path as necessary
 curr_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(curr_dir, '..'))
-from virtualhome.simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
+from simulation.environment.unity_environment import UnityEnvironment as BaseUnityEnvironment
 from virtualhome.simulation.evolving_graph import utils as utils_env
 
-# This class translates high-level NL task plans into simulated steps in vh
 class VhEnv(BaseUnityEnvironment):
+    # load dictionaries
     obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
-
+    
     def __init__(self, cfg):
-        super(VhEnv, self).__init__(
-            num_agents=1,
-            observation_types=cfg.environment.observation_types,
-            use_editor=cfg.environment.use_editor,
-            base_port=cfg.environment.base_port,
-            port_id=cfg.environment.port_id,
-            executable_args=cfg.environment.executable_args,
-            recording_options=cfg.environment.recording_options
-        )
+        super(VhEnv, self).__init__(num_agents=1,
+                                    observation_types=cfg.environment.observation_types,
+                                    use_editor=cfg.environment.use_editor,
+                                    base_port=cfg.environment.base_port,
+                                    port_id=cfg.environment.port_id,
+                                    executable_args=cfg.environment.executable_args,
+                                    recording_options=cfg.environment.recording_options)
         print("Environment is initialized")
         self.full_graph = None
 
@@ -45,7 +36,6 @@ class VhEnv(BaseUnityEnvironment):
         self.env_id = task_d['env_id']
         print("Resetting... Envid: {}. Taskid: {}. Taskname: {}".format(self.env_id, self.task_id, self.task_name))
         
-        # comm & expand scenes
         self.comm.reset(self.env_id)
         s, g = self.comm.environment_graph()
         edge_ids = set([edge['to_id'] for edge in g['edges']] + [edge['from_id'] for edge in g['edges']])
@@ -135,7 +125,6 @@ class VhEnv(BaseUnityEnvironment):
     # change based on actual tasks
     def check_walk(self, elements):
         return True, None
-    
     def check_grab(self, elements, graph, agent_id, id2nodes):
         ### Case 1. obj grabbable? 2. obj close? 3. obj inside open rec? 4. agent has free hand?
         obj_name, obj_id = elements[1], elements[2]
@@ -145,7 +134,6 @@ class VhEnv(BaseUnityEnvironment):
         is_agent_free_hand = utils.check_free_hand(graph, agent_id)
         # return True, None
         return is_obj_grabbable and is_obj_close and is_obj_in_open_recep and is_agent_free_hand, None
-    
     def check_open(self, elements, graph, agent_id, id2nodes):
         ### Case 1. obj opennable? 2. obj close? 3. agent has free hand? 4. obj open?
         obj_name, obj_id = elements[1], elements[2]
@@ -154,7 +142,6 @@ class VhEnv(BaseUnityEnvironment):
         is_obj_close = utils.check_node_is_close_to_agent(graph, agent_id, obj_id)
         is_agent_free_hand = utils.check_free_hand(graph, agent_id)
         return is_obj_opennable and is_obj_closed and is_obj_close and is_agent_free_hand, None
-    
     def check_close(self, elements, graph, agent_id, id2nodes):
         ### Case 1. obj opennable? 2. obj close? 3. agent has free hand? 4. obj closed?
         obj_name, obj_id = elements[1], elements[2]
@@ -163,7 +150,6 @@ class VhEnv(BaseUnityEnvironment):
         is_obj_close = utils.check_node_is_close_to_agent(graph, agent_id, obj_id)
         is_agent_free_hand = utils.check_free_hand(graph, agent_id)
         return is_obj_opennable and is_obj_open and is_obj_close and is_agent_free_hand, None
-    
     def check_switchon(self, elements, graph, agent_id, id2nodes):
         ### Case 1. obj has_switch? 2. obj close? 3. agent has free hand? 4. obj off?
         obj_name, obj_id = elements[1], elements[2]
@@ -173,7 +159,6 @@ class VhEnv(BaseUnityEnvironment):
         is_obj_off = 'OFF' in id2nodes[obj_id]['states']
         is_obj_closed = 'CLOSED' in id2nodes[obj_id]['states']
         return is_obj_hasswitch and is_obj_close and is_agent_free_hand and is_obj_off and is_obj_closed, None
-    
     def check_switchoff(self, elements, graph, agent_id, id2nodes):
         ### Case 1. obj has_switch? 2. obj close? 3. agent has free hand? 4. obj on?
         obj_name, obj_id = elements[1], elements[2]
@@ -182,7 +167,6 @@ class VhEnv(BaseUnityEnvironment):
         is_agent_free_hand = utils.check_free_hand(graph, agent_id)
         is_obj_on = 'ON' in id2nodes[obj_id]['states']
         return is_obj_hasswitch and is_obj_close and is_agent_free_hand and is_obj_on, None
-    
     def check_putin(self, elements, graph, agent_id, id2nodes):
         ### Case 1. agent holding obj1? 2. obj2 close? 3. obj2 container?
         obj1_name, obj1_id, obj2_name, obj2_id = elements[1], elements[2], elements[3], elements[4]
@@ -190,7 +174,6 @@ class VhEnv(BaseUnityEnvironment):
         is_obj2_close = utils.check_node_is_close_to_agent(graph, agent_id, obj2_id)
         is_obj2_container = 'CONTAINERS' in id2nodes[obj2_id]['properties']
         return is_agent_holing_obj1 and is_obj2_close and is_obj2_container, None
-    
     def check_putback(self, elements, graph, agent_id, id2nodes):
         ### Case 1. agent holding obj1? 2. obj2 close? 3. obj2 surface?
         obj1_name, obj1_id, obj2_name, obj2_id = elements[1], elements[2], elements[3], elements[4]
