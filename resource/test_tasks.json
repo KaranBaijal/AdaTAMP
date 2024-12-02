@@ -123,6 +123,42 @@
     ],
     "Medium": [
         {
+            "task_id": 622,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "put 1 fork and serve a glass of wine in the kitchen table"
+            ],
+            "task_plan": [
+                "find a wine glass",
+                "pick up the wine glass",
+                "find a kitchen table",
+                "put down the wine glass",
+                "find a fridge",
+                "open the fridge",
+                "find a cutlery fork",
+                "pick up the cutlery fork",
+                "find a kitchen table",
+                "put down the cutlery fork"
+            ]
+        },
+        {
+            "task_id": 128,
+            "task_name": "prepare_food",
+            "nl_instructions": [
+                "serve me a snack in the kitchen table"
+            ],
+            "task_plan": [
+                "find a cupcake",
+                "pick up the cupcake",
+                "find a kitchen table",
+                "put down the cupcake",
+                "find an apple",
+                "pick up the apple",
+                "find a kitchen table",
+                "put down the apple"
+            ]
+        },
+        {
             "task_id": 660,
             "task_name": "setup_table",
             "nl_instructions": [
@@ -139,7 +175,8 @@
             "task_id": 642,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Place a water glass and a plate on the table."
+                "Place a water glass and a plate on the table.",
+                "pick up water glass\nput water glass on the table\npick up plate\nput plate on the kitchen table, beside the water glass"
             ],
             "task_plan": [
                 "find a plate",
@@ -156,7 +193,7 @@
             "task_id": 56,
             "task_name": "prepare_snack",
             "nl_instructions": [
-                "Please serve a cupcake on the coffee table."
+                "Please serve a cupcake on the coffee table"
             ],
             "task_plan": [
                 "find a kitchen cabinet",
@@ -188,7 +225,8 @@
             "task_id": 667,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Bring a plate and put it on the kitchen table. Also fill a glass with water and put it on the kitchen table."
+                "Bring a plate and put it on the kitchen table. Also fill a glass with water and put it on the kitchen table",
+                "Please, set one glass of water and a plate on the table."
             ],
             "task_plan": [
                 "find a cabinet",
@@ -207,7 +245,9 @@
             "task_id": 627,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Get a fork and a wine glass and put them on the kitchen table."
+                "1. find all of: 1 cutlery fork and 1 wine glass and remember their location.\n2. remove all that are already on the kitchen table\n3. grab as much as you can hold by going to remembered locations\n4. go to kitchen table deposit at the table.\n5. if any elements aren't yet on the table go to step 3.",
+                "Get a fork and a wine glass and put them on the kitchen table.",
+                "Put 1 cutlery fork and 1 wine glass on the kitchen table"
             ],
             "task_plan": [
                 "find a wine glass",
@@ -218,6 +258,234 @@
                 "pick up the cutlery fork",
                 "find a kitchen table",
                 "put down the cutlery fork"
+            ]
+        },
+        {
+            "task_id": 634,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "Bring 1 wine glass and 1 glass of water and put them on the kitchen table"
+            ],
+            "task_plan": [
+                "find a water glass",
+                "pick up the water glass",
+                "find a kitchen table",
+                "put down the water glass",
+                "find a wine glass",
+                "pick up the wine glass",
+                "find a kitchen table",
+                "put down the wine glass"
+            ]
+        },
+        {
+            "task_id": 653,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "Put one wine glass and a plate on the kitchen table.",
+                "Please place 1 wine glass and 1 plate on the kitchen table.",
+                "Place a plate and a wine glass onto the kitchen table."
+            ],
+            "task_plan": [
+                "find a plate",
+                "pick up the plate",
+                "find a kitchen table",
+                "put down the plate",
+                "find a wine glass",
+                "pick up the wine glass",
+                "find a kitchen table",
+                "put down the wine glass"
+            ]
+        },
+        {
+            "task_id": 5,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "pudding and 1juice should always be for brunch and on the coffee table."
+            ],
+            "task_plan": [
+                "find a fridge",
+                "open the fridge",
+                "find a juice",
+                "pick up the juice",
+                "find a coffee table",
+                "put down the juice",
+                "find a pudding",
+                "pick up the pudding",
+                "find a coffee table",
+                "put down the pudding"
+            ]
+        },
+        {
+            "task_id": 644,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "leave the cutlery fork and the water glass on the kitchen table",
+                "Can you bring the cutlery fork and water glass to the kitchen table, Robot?"
+            ],
+            "task_plan": [
+                "find a water glass",
+                "pick up the water glass",
+                "find a kitchen table",
+                "put down the water glass",
+                "find a cabinet",
+                "open the cabinet",
+                "find a cutlery fork",
+                "pick up the cutlery fork",
+                "find a kitchen table",
+                "put down the cutlery fork"
+            ]
+        },
+        {
+            "task_id": 89,
+            "task_name": "put_dishwasher",
+            "nl_instructions": [
+                "get a water glass\nopen the dishwasher\nput the water glass in the dishwasher\nclose the dishwasher\nturn on the dishwasher"
+            ],
+            "task_plan": [
+                "find a dishwasher",
+                "open the dishwasher",
+                "find a water glass",
+                "pick up the water glass",
+                "find a dishwasher",
+                "put down the water glass",
+                "close the dishwasher",
+                "switch on the dishwasher"
+            ]
+        },
+        {
+            "task_id": 64,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "Serve one wine on the coffe table",
+                "Place the wine on the coffee table"
+            ],
+            "task_plan": [
+                "find a wine",
+                "pick up the wine",
+                "find a coffee table",
+                "put down the wine"
+            ]
+        },
+        {
+            "task_id": 637,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "Put the 1 plate on the kitchen table",
+                "First, take the plate out from the cabinet. Then put it on the kitchen table"
+            ],
+            "task_plan": [
+                "find a plate",
+                "pick up the plate",
+                "find a kitchen table",
+                "put down the plate"
+            ]
+        },
+        {
+            "task_id": 97,
+            "task_name": "put_dishwasher",
+            "nl_instructions": [
+                "Please open the dishwasher.  Put the wine glass in the dishwasher.  Set the dishwasher off on the normal cycle."
+            ],
+            "task_plan": [
+                "find a dishwasher",
+                "open the dishwasher",
+                "find a wine glass",
+                "pick up the wine glass",
+                "find a dishwasher",
+                "put down the wine glass",
+                "close the dishwasher",
+                "switch on the dishwasher"
+            ]
+        },
+        {
+            "task_id": 67,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "Put the pudding on the coffee table",
+                "Please bring a single pundding to the coffee table"
+            ],
+            "task_plan": [
+                "find a fridge",
+                "open the fridge",
+                "find a pudding",
+                "pick up the pudding",
+                "find a coffee table",
+                "put down the pudding"
+            ]
+        },
+        {
+            "task_id": 95,
+            "task_name": "put_dishwasher",
+            "nl_instructions": [
+                "Collect one plat and place it in the dishwasher. Turn on the dishwasher",
+                "Please put the plate in the dishwasher and turn it on."
+            ],
+            "task_plan": [
+                "find a dishwasher",
+                "open the dishwasher",
+                "find a fridge",
+                "open the fridge",
+                "find a plate",
+                "pick up the plate",
+                "find a dishwasher",
+                "put down the plate",
+                "close the dishwasher",
+                "switch on the dishwasher"
+            ]
+        },
+        {
+            "task_id": 38,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "I need you to bring me the following food items and put them on the coffee table:\n- 1 apple \n- 1 pudding",
+                "Put an apple and a pudding on the coffee table"
+            ],
+            "task_plan": [
+                "find a kitchen cabinet",
+                "open the kitchen cabinet",
+                "find a pudding",
+                "pick up the pudding",
+                "find a coffee table",
+                "put down the pudding",
+                "find an apple",
+                "pick up the apple",
+                "find a coffee table",
+                "put down the apple"
+            ]
+        },
+        {
+            "task_id": 24,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "Put an apple on the coffee table.",
+                "Bring me an apple and put it on the coffee table"
+            ],
+            "task_plan": [
+                "find a fridge",
+                "open the fridge",
+                "find an apple",
+                "pick up the apple",
+                "find a coffee table",
+                "put down the apple"
+            ]
+        },
+        {
+            "task_id": 26,
+            "task_name": "prepare_snack",
+            "nl_instructions": [
+                "Can you get an apple and a cupcake and put them on the coffee table",
+                "Put apple and cupcake on the coffee table.",
+                "Please set the coffe table, put an apple and a cupcake"
+            ],
+            "task_plan": [
+                "find a cupcake",
+                "pick up the cupcake",
+                "find a coffee table",
+                "put down the cupcake",
+                "find an apple",
+                "pick up the apple",
+                "find a coffee table",
+                "put down the apple"
             ]
         },
         {
@@ -243,7 +511,7 @@
             "task_id": 658,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Get a bottle of wine and put it on the kitchen table."
+                "get a bottle of wine\nput it on the kitchen table\nget a water glass\nput it on the kitchen table"
             ],
             "task_plan": [
                 "find a water glass",
@@ -260,7 +528,8 @@
             "task_id": 29,
             "task_name": "prepare_snack",
             "nl_instructions": [
-                "Put the cupcake and the juice on the coffee table, please."
+                "Put the cupcake and the juice on the coffeee table, please.",
+                "Take one cupcake and one juice to the coffee table"
             ],
             "task_plan": [
                 "find a cupcake",
@@ -279,7 +548,9 @@
             "task_id": 657,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Take 1 wine glass and 1 plate from the cupboard and place them on the kitchen table."
+                "Take 1 wine glass and 1 plate from the cupboard and place them on the kitchen table",
+                "1 glass of red wine for after lunch.\nPut one plate of snacks in the table.",
+                "Fetch wine glass and a plate from the shelf and then put them on the kitchen table."
             ],
             "task_plan": [
                 "find a plate",
@@ -293,123 +564,17 @@
             ]
         },
         {
-            "task_id": 543,
-            "task_name": "put_fridge",
-            "nl_instructions": [
-                "Could you put 1 apple, 1 pancake, 1 cupcake and 1 pudding in the fridge?"
-            ],
-            "task_plan": [
-                "find a fridge",
-                "open the fridge",
-                "find a kitchen cabinet",
-                "open the kitchen cabinet",
-                "find a cupcake",
-                "pick up the cupcake",
-                "find a fridge",
-                "put down the cupcake",
-                "find a pancake",
-                "pick up the pancake",
-                "find a fridge",
-                "put down the pancake",
-                "find a pudding",
-                "pick up the pudding",
-                "find a fridge",
-                "put down the pudding",
-                "find an apple",
-                "pick up the apple",
-                "find a fridge",
-                "put down the apple",
-                "close the fridge"
-            ]
-        },
-        {
-            "task_id": 240,
-            "task_name": "prepare_food",
-            "nl_instructions": [
-                "Get a coffee pot, put it on the kitchen table, get a wine, put it on the kitchen table."
-            ],
-            "task_plan": [
-                "find a kitchen cabinet",
-                "open the kitchen cabinet",
-                "find a coffee pot",
-                "pick up the coffee pot",
-                "find a kitchen table",
-                "put down the coffee pot",
-                "find a wine",
-                "pick up the wine",
-                "find a kitchen table",
-                "put down the wine"
-            ]
-        },
-        {
-            "task_id": 90,
-            "task_name": "put_dishwasher",
-            "nl_instructions": [
-                "Put glasses and plate into the dishwasher and turn it on."
-            ],
-            "task_plan": [
-                "find a dishwasher",
-                "open the dishwasher",
-                "find a plate",
-                "pick up the plate",
-                "find a dishwasher",
-                "put down the plate",
-                "find a water glass",
-                "pick up the water glass",
-                "find a dishwasher",
-                "put down the water glass",
-                "close the dishwasher",
-                "switch on the dishwasher"
-            ]
-        },
-        {
-            "task_id": 113,
-            "task_name": "put_dishwasher",
-            "nl_instructions": [
-                "Put in the water glass first, before the wine glass, then the cutlery fork and then the plates on the dishwasher."
-            ],
-            "task_plan": [
-                "find a dishwasher",
-                "open the dishwasher",
-                "find a water glass",
-                "pick up the water glass",
-                "find a dishwasher",
-                "put down the water glass",
-                "find a wine glass",
-                "pick up the wine glass",
-                "find a dishwasher",
-                "put down the wine glass",
-                "find a cutlery fork",
-                "pick up the cutlery fork",
-                "find a dishwasher",
-                "put down the cutlery fork",
-                "find a plate",
-                "pick up the plate",
-                "find a dishwasher",
-                "put down the plate",
-                "close the dishwasher",
-                "switch on the dishwasher"
-            ]
-        },
-        {
-            "task_id": 648,
+            "task_id": 656,
             "task_name": "setup_table",
             "nl_instructions": [
-                "1 plate, 1 cutlery fork, 1 wine glass and 1 water glass must go on the kitchen table."
+                "Set 1 water glass and 1 plate on the kitchen table",
+                "pick up water glass\nput water glass on the table\npick up plate\nput plate on the kitchen table, beside the water glass"
             ],
             "task_plan": [
                 "find a plate",
                 "pick up the plate",
                 "find a kitchen table",
                 "put down the plate",
-                "find a cutlery fork",
-                "pick up the cutlery fork",
-                "find a kitchen table",
-                "put down the cutlery fork",
-                "find a wine glass",
-                "pick up the wine glass",
-                "find a kitchen table",
-                "put down the wine glass",
                 "find a water glass",
                 "pick up the water glass",
                 "find a kitchen table",
@@ -417,125 +582,82 @@
             ]
         },
         {
-            "task_id": 84,
-            "task_name": "put_dishwasher",
-            "nl_instructions": [
-                "Go to the kitchen and open the dishwasher door. Remove any items which have already been cleaned."
-            ],
-            "task_plan": [
-                "find a dishwasher",
-                "open the dishwasher",
-                "find a cutlery fork",
-                "pick up the cutlery fork",
-                "find a dishwasher",
-                "put down the cutlery fork",
-                "find a wine glass",
-                "pick up the wine glass",
-                "find a dishwasher",
-                "put down the wine glass",
-                "find a plate",
-                "pick up the plate",
-                "find a dishwasher",
-                "put down the plate",
-                "close the dishwasher",
-                "switch on the dishwasher"
-            ]
-        },
-        {
-            "task_id": 99,
-            "task_name": "put_dishwasher",
-            "nl_instructions": [
-                "Add a fork and a plate to the dishwasher and switch it on."
-            ],
-            "task_plan": [
-                "find a dishwasher",
-                "open the dishwasher",
-                "find a cutlery fork",
-                "pick up the cutlery fork",
-                "find a dishwasher",
-                "put down the cutlery fork",
-                "find a plate",
-                "pick up the plate",
-                "find a dishwasher",
-                "put down the plate",
-                "close the dishwasher",
-                "switch on the dishwasher"
-            ]
-        },
-        {
-            "task_id": 62,
-            "task_name": "prepare_snack",
-            "nl_instructions": [
-                "Please place an apple, a cupcake and a juice on top of the coffee table."
-            ],
-            "task_plan": [
-                "find a fridge",
-                "open the fridge",
-                "find an apple",
-                "pick up the apple",
-                "find a coffee table",
-                "put down the apple",
-                "find a cupcake",
-                "pick up the cupcake",
-                "find a coffee table",
-                "put down the cupcake",
-                "find a juice",
-                "pick up the juice",
-                "find a coffee table",
-                "put down the juice"
-            ]
-        },
-        {
-            "task_id": 17,
-            "task_name": "prepare_snack",
-            "nl_instructions": [
-                "Place 1 pudding, 1 apple and 1 juice on to the coffee table."
-            ],
-            "task_plan": [
-                "find a kitchen cabinet",
-                "open the kitchen cabinet",
-                "find a pudding",
-                "pick up the pudding",
-                "find a coffee table",
-                "put down the pudding",
-                "find a fridge",
-                "open the fridge",
-                "find an apple",
-                "pick up the apple",
-                "find a coffee table",
-                "put down the apple",
-                "find a juice",
-                "pick up the juice",
-                "find a coffee table",
-                "put down the juice"
-            ]
-        },
-        {
-            "task_id": 638,
+            "task_id": 652,
             "task_name": "setup_table",
             "nl_instructions": [
-                "Put a wine glass, water glass, and a plate on the table."
+                "Collect the fork and plate. Take both items to the kitchen table. Place fork and plate onto the kitchen table.",
+                "Put the plate and cutlery fork on the kitchen table"
             ],
             "task_plan": [
-                "find a wine glass",
-                "pick up the wine glass",
+                "find a plate",
+                "pick up the plate",
                 "find a kitchen table",
-                "put down the wine glass",
+                "put down the plate",
+                "find a cabinet",
+                "open the cabinet",
+                "find a cutlery fork",
+                "pick up the cutlery fork",
+                "find a kitchen table",
+                "put down the cutlery fork"
+            ]
+        },
+        {
+            "task_id": 625,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "bring 1 cutlery fork on the table",
+                "Put the fork on the table",
+                "Put fork on the kitchen table."
+            ],
+            "task_plan": [
+                "find a dishwasher",
+                "open the dishwasher",
+                "find a cutlery fork",
+                "pick up the cutlery fork",
+                "find a kitchen table",
+                "put down the cutlery fork"
+            ]
+        },
+        {
+            "task_id": 630,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "Get the wine glass and water glass out of the cupboard and put them on the kitchen table."
+            ],
+            "task_plan": [
                 "find a water glass",
                 "pick up the water glass",
                 "find a kitchen table",
                 "put down the water glass",
-                "find a plate",
-                "pick up the plate",
+                "find a wine glass",
+                "pick up the wine glass",
                 "find a kitchen table",
-                "put down the plate"
+                "put down the wine glass"
             ]
         },
         {
-            "task_id": 69,
+            "task_id": 646,
+            "task_name": "setup_table",
+            "nl_instructions": [
+                "Hey robot, please bring one wine glass and one water glass from the cabinet and place them on the kitchen table."
+            ],
+            "task_plan": [
+                "find a water glass",
+                "pick up the water glass",
+                "find a kitchen table",
+                "put down the water glass",
+                "find a wine glass",
+                "pick up the wine glass",
+                "find a kitchen table",
+                "put down the wine glass"
+            ]
+        },
+        {
+            "task_id": 80,
             "task_name": "put_dishwasher",
             "nl_instructions": [
-                "Please put a cutlery fork and a glass of wine and a plate in the dishwasher, then turn the dishwasher on."
+                "Please put this fork in the dishwasher and start it",
+                "open dishwasher\npick up cutlery fork\nput fork in dishwasher\nclose dishwasher\nturn dishwasher on"
             ],
             "task_plan": [
                 "find a dishwasher",
@@ -544,34 +666,9 @@
                 "pick up the cutlery fork",
                 "find a dishwasher",
                 "put down the cutlery fork",
-                "find a wine glass",
-                "pick up the wine glass",
-                "find a dishwasher",
-                "put down the wine glass",
-                "find a plate",
-                "pick up the plate",
-                "find a dishwasher",
-                "put down the plate",
                 "close the dishwasher",
                 "switch on the dishwasher"
-            ]
-        },
-        {
-            "task_id": 629,
-            "task_name": "setup_table",
-            "nl_instructions": [
-                "Place the cutlery fork and water glass on the kitchen table."
-            ],
-            "task_plan": [
-                "find a cutlery fork",
-                "pick up the cutlery fork",
-                "find a kitchen table",
-                "put down the cutlery fork",
-                "find a water glass",
-                "pick up the water glass",
-                "find a kitchen table",
-                "put down the water glass"
             ]
         }
     ]
-} 
+}
