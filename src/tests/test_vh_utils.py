@@ -26,51 +26,52 @@ def separate_new_ids_graph(graph, max_id):
     return new_graph
 
 # extract natural language instructions (e.g., put down the book) to executable script in vh
-def step_nl2sim(step_nl, obj_dict_nl2sim, target_object, resource_folder='resource'):
-    print(f"Received step_nl: {step_nl}")
+def step_nl2sim(step_nl, obj_dict_nl2sim, cur_recep, resource_folder='resource'):
+    
     obj_dict_sim2nl, obj_dict_nl2sim = load_dict()
 
-    # Normalize step to ensure consistent matching
-    step_nl_normalized = step_nl.strip().lower()
-
-    # Handle "walk" with decomposition into steps if needed
-    if step_nl_normalized == "walk":
-        # Check if the target object exists in the dictionary
-        if target_object in obj_dict_nl2sim:
-            target_sim = obj_dict_nl2sim[target_object]
-
-            # If the target is a room, walk via its door
-            if "room" in target_object.lower():
-                door_sim = obj_dict_nl2sim.get(f"{target_object}_door")  # Example: "kitchen_door"
-                if not door_sim:
-                    raise ValueError(f"No door found for the room '{target_object}'. Ensure door exists in object dictionary.")
-
-                # Decompose walk into multiple steps
-                script = [
-                    f"<char0> [walk] <{door_sim}> (1)",  # Walk to the door
-                    f"<char0> [open] <{door_sim}> (1)",  # Open the door
-                    f"<char0> [walk] <{target_sim}> (1)"  # Enter the room
-                ]
-            else:
-                # For non-room targets, walk directly to the object
-                script = [f"<char0> [walk] <{target_sim}> (1)"]
+    if "put down" in step_nl:
+        nl_putin_objs = ['bathroom cabinet', 'bookshelf', 'box', 'cabinet', 'closet', 'pile of clothes', 'coffee maker', 'dishwasher', 'folder', 'fridge', 'frying pan', 'garbage can', 'kitchen cabinet', 'microwave oven', 'nightstand', 'printer', 'sink', 'stove', 'toaster', 'toilet', 'washing machine']
+        nl_putback_objs = ['bathroom cabinet', 'bathroom counter', 'bed', 'bench', 'board game', 'bookshelf', 'cabinet', 'chair', 'coffee table', 'cutting board', 'desk', 'floor', 'frying pan', 'kitchen cabinet', 'kitchen counter', 'kitchen table', 'mouse mat', 'nightstand', 'oven tray', 'plate', 'radio', 'rug', 'sofa', 'stove', 'towel rack']
+        obj1_name = step_nl.split("put down the ")[1]
+        if cur_recep == None:
+            obj2_name = obj1_name
         else:
-            raise ValueError(f"Target object '{target_object}' not found in object dictionary.")
-
-    # Handle other actions (grab, open, close, etc.)
-    elif step_nl_normalized in ["grab", "open", "close", "look", "switchon", "switchoff"]:
-        action = step_nl_normalized
-        obj_sim = obj_dict_nl2sim.get(target_object)
-        if not obj_sim:
-            raise ValueError(f"Object '{target_object}' not found in object dictionary.")
-        script = [f"<char0> [{action}] <{obj_sim}> (1)"]
-
-    # Raise error for unsupported actions
+            obj2_name = cur_recep
+        obj1_sim, obj2_sim = obj_dict_nl2sim[obj1_name], obj_dict_nl2sim[obj2_name]
+        if cur_recep in nl_putin_objs:
+            script = f"<char0> [putin] <{obj1_sim}> (1) <{obj2_sim}> (1)"
+        else:
+            script = f"<char0> [putback] <{obj1_sim}> (1) <{obj2_sim}> (1)"
     else:
-        raise NotImplementedError(f"Step '{step_nl}' is not supported.")
-
-    # Debugging: Print the generated script(s)
-    print(f"Translated step '{step_nl}' to script(s): {script}")
+        if "find " in step_nl:
+            action = "walk"
+            obj1_w_article = step_nl.split("find ")[1]
+            if "a " in obj1_w_article:
+                obj1_name = obj1_w_article.split("a ")[1]
+            elif "an " in obj1_w_article:
+                obj1_name = obj1_w_article.split("an ")[1]
+            else:
+                raise NotImplementedError
+        elif "go to" in step_nl:
+            action = "walk"
+            obj1_name = step_nl.split("go to the ")[1]
+        elif "pick up " in step_nl:
+            action = "grab"
+            obj1_name = step_nl.split("pick up the ")[1]
+        elif "open " in step_nl:
+            action = "open"
+            obj1_name = step_nl.split("open the ")[1]
+        elif "close " in step_nl:
+            action = "close"
+            obj1_name = step_nl.split("close the ")[1]
+        elif "switch on " in step_nl:
+            action = "switchon"
+            obj1_name = step_nl.split("switch on the ")[1]
+        else:
+            raise NotImplementedError
+        obj1_sim = obj_dict_nl2sim[obj1_name]
+        script = f"<char0> [{action}] <{obj1_sim}> (1)"
     return script
 
 

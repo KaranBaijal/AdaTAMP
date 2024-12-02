@@ -73,7 +73,6 @@ class VhEnv(BaseUnityEnvironment):
         self.cur_recep = None
 
     # execute a step using step_nl2sim func. 
-    # can be implemented later 
     def step(self, step_nl):
         step_sim = utils.step_nl2sim(step_nl, self.obj_dict_nl2sim, self.cur_recep)
         step = self.assign_id(step_sim)
@@ -198,3 +197,34 @@ class VhEnv(BaseUnityEnvironment):
         is_obj2_close = utils.check_node_is_close_to_agent(graph, agent_id, obj2_id)
         is_obj2_surface = 'SURFACES' in id2nodes[obj2_id]['properties']
         return is_agent_holing_obj1 and is_obj2_close and is_obj2_surface, None
+
+
+    # # Use the below methods for motion planning
+    # def calculate_path_to_object(self, target_object):
+    #     graph = self.get_graph()
+    #     agent_position = self.get_agent_position()
+    #     target_position = self.get_object_position(target_object)
+        
+    #     # Use VirtualHome's built-in A* pathfinding (or replace with a custom one if needed)
+    #     path = self.virtualhome_a_star(agent_position, target_position)
+    #     return path
+
+    # def virtualhome_a_star(self, start, goal):
+    #     return self.comm.find_path(start, goal)
+
+    # def get_agent_position(self):
+    #     graph = self.get_graph()
+    #     agent_id = self.get_agent_id(graph)
+    #     agent_node = next(node for node in graph['nodes'] if node['id'] == agent_id)
+    #     return agent_node['obj_transform']['position']
+
+    # def get_object_position(self, object_name):
+    #     graph = self.get_graph()
+    #     object_node = next(node for node in graph['nodes'] if node['class_name'] == object_name)
+    #     return object_node['obj_transform']['position']
+
+    # def get_agent_id(self, graph):
+    #     agent_ids = [node['id'] for node in graph['nodes'] if node['class_name'] == 'character']
+    #     if len(agent_ids) != 1:
+    #         raise ValueError("There should be exactly one agent in the environment.")
+    #     return agent_ids[0]

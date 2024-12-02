@@ -1,7 +1,12 @@
+#!/Users/zhiwenqiu/opt/anaconda3/envs/zhiwen-project/bin/python
 import sys, os
 from sys import platform
+import subprocess
+print("Python executable:", sys.executable)
+
 from PIL import Image
 import json
+import jsonschema
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import argparse
@@ -10,7 +15,6 @@ from src.task_planner import TaskPlanner
 from src.vh_environment import VhEnv
 import src.vh_utils as utils
 from src.tests.graph_verification import verify_graph_structure
-
 from virtualhome.simulation.unity_simulator import comm_unity
 from virtualhome.demo.utils_demo import *
 
@@ -18,7 +22,6 @@ from virtualhome.demo.utils_demo import *
 # modify dir
 YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.2.2.4.app"
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
-
 
 class MockConfig:
     class Environment:
@@ -36,11 +39,43 @@ class MockConfig:
 
     environment = Environment()
 
+action_sequence_schema = {
+    "type": "object",
+    "properties": {
+        "action_sequence": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "character": {"type": "string"},
+                    "action": {"type": "string"},
+                    "object": {"type": "string"},
+                    "id": {"type": "integer"}
+                },
+                "required": ["character", "action", "object", "id"],
+                "additionalProperties": False
+            }
+        }
+    },
+    "required": ["action_sequence"],
+    "additionalProperties": False
+}
+
+def validate_response(response):
+    try:
+        jsonschema.validate(instance=response, schema=action_sequence_schema)
+        print("Validation successful!")
+        return True
+    except jsonschema.ValidationError as e:
+        print("Validation Error:", e.message)
+        return False
 
 if __name__ == '__main__':
     #openai_api_key = "your_openai_api_key_here"
     openai_api_key = "REMOVED_API_KEY"
-    task_description = "sit on the sofa"
+    
+    # modify to run all tasks
+    task_description = "find kitchen"
 
     # Generate the initial graph
     comm.reset(0)
@@ -48,214 +83,74 @@ if __name__ == '__main__':
     if not success:
         print("Failed to retrieve the initial environment graph.")
     
+    # Define a simple initial graph
     init_graph = {
-    "nodes": [
-        # Rooms
-        {
-            "id": 1,
-            "class_name": "kitchen",
-            "category": "Rooms",
-            "obj_transform": {
-                "position": [0, 0, 0],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
+        "nodes": [
+            {
+                "id": 1,
+                "class_name": "kitchen",
+                "category": "Rooms",
+                "obj_transform": {
+                    "position": [0, 0, 0],
+                    "rotation": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "properties": [],
+                "states": []
+            },
+            {
+                "id": 227,
+                "class_name": "door",
+                "category": "Doors",
+                "obj_transform": {
+                    "position": [0, 0, 1],
+                    "rotation": [0, 0, 0, 1],
+                    "scale": [1, 1, 1]
+                },
+                "properties": ["CAN_OPEN"],
+                "states": ["CLOSED"]
             }
-        },
-        {
-            "id": 2,
-            "class_name": "livingroom",
-            "category": "Rooms",
-            "obj_transform": {
-                "position": [5, 0, 0],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
+        ],
+        "edges": [
+            {
+                "from_id": 227,
+                "to_id": 1,
+                "relation": "CONNECTED_TO"
             }
-        },
+        ]
+    }
 
-        # Kitchen objects
-        {
-            "id": 3,
-            "class_name": "fridge",
-            "category": "Furniture",
-            "obj_transform": {
-                "position": [1, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 4,
-            "class_name": "dishwasher",
-            "category": "Appliances",
-            "obj_transform": {
-                "position": [2, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 5,
-            "class_name": "cabinet",
-            "category": "Furniture",
-            "obj_transform": {
-                "position": [3, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 6,
-            "class_name": "kitchen table",
-            "category": "Furniture",
-            "obj_transform": {
-                "position": [4, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 7,
-            "class_name": "wine glass",
-            "category": "Utensils",
-            "obj_transform": {
-                "position": [3, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 8,
-            "class_name": "water glass",
-            "category": "Utensils",
-            "obj_transform": {
-                "position": [3, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 9,
-            "class_name": "pudding",
-            "category": "Food",
-            "obj_transform": {
-                "position": [1, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
+    # print("Initial Graph for Debugging:")
+    # print(json.dumps(init_graph, indent=2))
 
-        # Livingroom objects
-        {
-            "id": 10,
-            "class_name": "coffee table",
-            "category": "Furniture",
-            "obj_transform": {
-                "position": [6, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        },
-        {
-            "id": 11,
-            "class_name": "sofa",
-            "category": "Furniture",
-            "obj_transform": {
-                "position": [7, 0, 1],
-                "rotation": [0, 0, 0, 1],
-                "scale": [1, 1, 1]
-            }
-        }
-    ],
-    "edges": [
-        {"from_id": 7, "to_id": 5, "relation_type": "INSIDE"},
-        {"from_id": 8, "to_id": 5, "relation_type": "INSIDE"},
-        {"from_id": 9, "to_id": 3, "relation_type": "INSIDE"},
+    # Verify graph nodes and edges
+    # verify_graph_structure(init_graph)
 
-        {"from_id": 10, "to_id": 2, "relation_type": "INSIDE"},
-        {"from_id": 11, "to_id": 2, "relation_type": "INSIDE"}
-    ]
-}
-
-print("Initial Graph for Debugging:")
-print(json.dumps(init_graph, indent=2))
-
-    # # Try expanding this minimal graph
-    # success, message = comm.expand_scene(init_graph)
-    # if not success:
-    #     print(f"Failed to expand scene: {message}")
-    # else:
-    #     print("Scene expanded successfully.")
-    #     init_graph = {
-    #         "nodes": [],
-    #         "edges": []
-    #     }
-
-    # # Add a cat node linked to the sofa
-
-    # sofa = [node for node in init_graph['nodes'] if node['class_name'] == 'sofa'][-1]
-    # cat_node = {
-    #         'class_name': 'cat',
-    #         'category': 'Animals',
-    #         'id': 1000,
-    #         'properties': [],
-    #         'states': [],
-    #         'obj_transform': {'position': [1, 0, 1], 'rotation': [0, 0, 0, 1], 'scale': [1, 1, 1]}
-    #     }
-    # init_graph['nodes'].append(cat_node)
-    # init_graph['edges'].append({'from_id': 1000, 'to_id': sofa['id'], 'relation_type': 'ON'})
-
-    #  # Modify TV and light nodes' states
-    # tv_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'tv')
-    # light_node = next(node for node in init_graph['nodes'] if node['class_name'] == 'lightswitch')
-    # tv_node['states'] = ['ON']
-    # light_node['states'] = ['OFF']
-
-    # # Add a character node to the environment
-    # character_node = {
-    #         'id': 2000,
-    #         'class_name': 'character',
-    #         'category': 'Agents',
-    #         'properties': [],
-    #         'states': [],
-    #         'obj_transform': {
-    #             'position': [2, 0, 2],
-    #             'rotation': [0, 0, 0, 1],
-    #             'scale': [1, 1, 1]
-    #         }
-    # }
-    # init_graph['nodes'].append(character_node)
-
-    # verify graph nodes and edges
-    verify_graph_structure(init_graph)
-
-    # Create sample task_d for resetting the environment
     task_d = {
         'task_id': 1,
         'init_graph': init_graph,
-        'init_room': 'living_room',
+        'init_room': 'kitchen',
         'task_goal': {},
         'task_name': task_description,
         'env_id': 0
     }
 
     mock_cfg = MockConfig()
-
-    # Initialize TaskPlanner
     planner = TaskPlanner(
-        openai_api_key=openai_api_key,
-        cfg=mock_cfg
-    )
-
-    # Reset the environment with the task details
+            openai_api_key=openai_api_key,
+            cfg=mock_cfg
+        )
     planner.env.reset(task_d)
 
-    # Generate and print actions
     actions = planner.init_task_plan(task_description)
-    print("Generated Task Plan:", actions)
+    # print("Generated Task Plan:", actions)
 
-    # Execute the plan and print the result
-    success = planner.execute_plan(actions)
-    if success:
-        print("Task executed successfully.")
+    if validate_response({"action_sequence": actions}):
+        print("Actions are valid. Proceeding with execution...")
+        success = planner.execute_plan(actions)
+        if success:
+            print("Task executed successfully!")
+        else:
+            print("Task execution failed.")
     else:
-        print("Task execution failed.")
+        print("Invalid action sequence. Aborting execution.")
