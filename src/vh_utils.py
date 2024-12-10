@@ -33,31 +33,33 @@ def step_nl2sim(step_nl, obj_dict_nl2sim, target_object, resource_folder='resour
     # Normalize step to ensure consistent matching
     step_nl_normalized = step_nl.strip().lower()
 
-    # Handle "walk" with decomposition into steps if needed
     if step_nl_normalized == "walk":
-        # Check if the target object exists in the dictionary
         if target_object in obj_dict_nl2sim:
             target_sim = obj_dict_nl2sim[target_object]
 
-            # If the target is a room, walk via its door
             if "room" in target_object.lower():
-                door_sim = obj_dict_nl2sim.get(f"{target_object}_door")  # Example: "kitchen_door"
-                if not door_sim:
-                    raise ValueError(f"No door found for the room '{target_object}'. Ensure door exists in object dictionary.")
+                graph = self.get_graph()
+                doors = [node for node in graph["nodes"] if node["class_name"] == "door"]
+                connected_doors = [
+                    door for door in doors
+                    if any(edge["from_id"] == door["id"] and edge["to_id"] == obj_dict_nl2sim[target_object] for edge in graph["edges"])
+                ]
 
-                # Decompose walk into multiple steps
+                if not connected_doors:
+                    raise ValueError(f"No door found connected to the room '{target_object}'. Check graph relationships.")
+
+                door_sim = connected_doors[0]["id"]
+
                 script = [
-                    f"<char0> [walk] <{door_sim}> (1)",  # Walk to the door
-                    f"<char0> [open] <{door_sim}> (1)",  # Open the door
-                    f"<char0> [walk] <{target_sim}> (1)"  # Enter the room
+                    f"<char0> [walk] <{door_sim}> (1)", 
+                    f"<char0> [open] <{door_sim}> (1)",  
+                    f"<char0> [walk] <{target_sim}> (1)" 
                 ]
             else:
-                # For non-room targets, walk directly to the object
                 script = [f"<char0> [walk] <{target_sim}> (1)"]
         else:
             raise ValueError(f"Target object '{target_object}' not found in object dictionary.")
 
-    # Handle other actions (grab, open, close, etc.)
     elif step_nl_normalized in ["grab", "open", "close", "look", "switchon", "switchoff"]:
         action = step_nl_normalized
         obj_sim = obj_dict_nl2sim.get(target_object)
@@ -65,11 +67,9 @@ def step_nl2sim(step_nl, obj_dict_nl2sim, target_object, resource_folder='resour
             raise ValueError(f"Object '{target_object}' not found in object dictionary.")
         script = [f"<char0> [{action}] <{obj_sim}> (1)"]
 
-    # Raise error for unsupported actions
     else:
         raise NotImplementedError(f"Step '{step_nl}' is not supported.")
 
-    # Debugging: Print the generated script(s)
     print(f"Translated step '{step_nl}' to script(s): {script}")
     return script
 

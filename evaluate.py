@@ -75,7 +75,7 @@ if __name__ == '__main__':
     openai_api_key = "REMOVED_API_KEY"
     
     # modify to run all tasks
-    task_description = "find kitchen"
+    task_description = "Put 1 cupcake, 1 juice, 1 pound cake, and 1 pudding on the kitchen table"
 
     # Generate the initial graph
     comm.reset(0)
