@@ -1,6 +1,6 @@
 import sys, os
 # add root path to avoid errors for __init__.py from vh
-sys.path.insert(0, '/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome')
+sys.path.insert(0, 'virtualhome')
 import json
 from openai import OpenAI
 from src.vh_environment import VhEnv

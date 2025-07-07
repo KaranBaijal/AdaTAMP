@@ -16,7 +16,7 @@ from virtualhome.demo.utils_demo import *
 
 
 # modify dir
-YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/macos_exec.2.2.4.app"
+YOUR_FILE_NAME = "virtualhome/macos_exec.2.2.4.app"
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
 
 
@@ -26,7 +26,7 @@ class MockConfig:
         use_editor = True
         base_port = 8080
         port_id = 1
-        executable_args = {'file_name': "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/macos_exec.2.2.4.app"}
+        executable_args = {'file_name': "virtualhome/macos_exec.2.2.4.app"}
         recording_options = {
             'recording': False,
             'output_folder': './output',
@@ -38,8 +38,11 @@ class MockConfig:
 
 
 if __name__ == '__main__':
-    #openai_api_key = "your_openai_api_key_here"
-    openai_api_key = "REMOVED_API_KEY"
+    # Get API key from environment variable
+    openai_api_key = os.getenv('OPENAI_API_KEY')
+    if not openai_api_key:
+        print("Warning: OPENAI_API_KEY environment variable not set. Please set it before running.")
+        openai_api_key = "your_openai_api_key_here"  # Placeholder
     task_description = "sit on the sofa"
 
     # Generate the initial graph

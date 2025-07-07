@@ -20,7 +20,7 @@ from virtualhome.demo.utils_demo import *
 
 
 # modify dir
-YOUR_FILE_NAME = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/simulation/macos_exec.2.2.4.app"
+YOUR_FILE_NAME = # URL of virtual Home App
 comm = comm_unity.UnityCommunication(file_name=YOUR_FILE_NAME, port="8080", x_display="0")
 
 class MockConfig:
@@ -29,7 +29,7 @@ class MockConfig:
         use_editor = True
         base_port = 8080
         port_id = 1
-        executable_args = {'file_name': "/Users/zhiwenqiu/Documents/projects/AdaTAMP/virtualhome/macos_exec.2.2.4.app"}
+        executable_args = {'file_name': YOUR_FILE_NAME}
         recording_options = {
             'recording': False,
             'output_folder': './output',
@@ -71,8 +71,7 @@ def validate_response(response):
         return False
 
 if __name__ == '__main__':
-    #openai_api_key = "your_openai_api_key_here"
-    openai_api_key = "REMOVED_API_KEY"
+    openai_api_key = "your_openai_api_key_here"
     
     # modify to run all tasks
     task_description = "Put 1 cupcake, 1 juice, 1 pound cake, and 1 pudding on the kitchen table"

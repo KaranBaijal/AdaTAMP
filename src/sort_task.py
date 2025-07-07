@@ -39,8 +39,9 @@ def save_tasks(sorted_tasks, output_file):
         json.dump(sorted_tasks, file, indent=4)
 
 def main():
-    input_file = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/resource/task_examples.json"
-    output_file = "/Users/zhiwenqiu/Documents/projects/AdaTAMP/resource/sorted_tasks.json"
+    # File paths
+    input_file = "resource/task_examples.json"
+    output_file = "resource/sorted_tasks.json"
 
     # List of single-step task descriptions
     single_step_descriptions = [
