@@ -120,7 +120,6 @@ The framework requires configuration for:
 
 ## License
 
-[Add your license information here]
 
 ## Citation
 
@@ -129,8 +128,8 @@ If you use AdaTAMP in your research, please cite:
 ```bibtex
 @article{adatamp2024,
     title={AdaTAMP: Adaptive Task and Motion Planning for Embodied Agents},
-    author={[Authors]},
-    journal={[Journal/Conference]},
-    year={2024}
+    author={Karan Baijal, Calvin Qiu, Jennifer Sum},
+    journal={ICRA},
+    year={2025}
 }
 ```

@@ -1,0 +1,2 @@
+sk-[a-zA-Z0-9]{48,}=>REMOVED_API_KEY
+sk-proj-[a-zA-Z0-9\-]+=>REMOVED_API_KEY 
